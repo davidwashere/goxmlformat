@@ -7,12 +7,6 @@ import (
 
 func identStr(indent int) string {
 	return strings.Repeat("   ", indent)
-	// fmtStr := ""
-	// for i := 0; i < indent; i++ {
-	// 	fmtStr += "   " *
-	// }
-
-	// return fmtStr
 }
 
 // FormatXML - Returns xmlStr formatted for Pretty Printing
