@@ -62,7 +62,7 @@ func FormatXML(xmlStr string) string {
 				prevFinished = true
 
 			} else if first == '?' || first == '!' || last == '/' {
-				// handles header <?xml ... ?>, and comments <!-- blah -->, self closing tags <br />
+				// handles header <?xml ... ?>, comments <!-- blah -->, and self closing tags <br />
 				bufStr = strings.TrimSpace(bufStr)
 
 				if prevFinished {
