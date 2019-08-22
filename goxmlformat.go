@@ -9,13 +9,6 @@ func identStr(indent int) string {
 	return strings.Repeat("   ", indent)
 }
 
-// This is a test string the validates all the desired functionality
-// TODO: ADD TO TEST
-/*
-var data = `<?xml version="1.0" encoding="UTF-8"?><root><!-- comment --><hi>blah</hi><!-- comment --><a><![CDATA[<>>>>
-<><>]]></a><attr hi="world">data</attr><list><selfend /><T>true</T><F>false</F><selfend /></list></root>`
-*/
-
 // FormatXML - Returns xmlStr formatted for Pretty Printing
 func FormatXML(xmlStr string) string {
 	var final strings.Builder
@@ -56,8 +49,6 @@ func FormatXML(xmlStr string) string {
 			bufStr := buffer.String()
 			first := strings.LastIndex(bufStr, "<") + 1
 			last := len(bufStr) - 2
-
-			// fmt.Printf("First[%d] Last[%d]\n", first, last)
 
 			if bufStr[first] == '/' {
 				i--
