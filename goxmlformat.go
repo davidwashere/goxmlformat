@@ -47,10 +47,10 @@ func FormatXML(xmlStr string) string {
 
 		if c == '>' {
 			bufStr := buffer.String()
-			first := strings.LastIndex(bufStr, "<") + 1
-			last := len(bufStr) - 2
+			first := bufStr[strings.LastIndex(bufStr, "<")+1]
+			last := bufStr[len(bufStr)-2]
 
-			if bufStr[first] == '/' {
+			if first == '/' {
 				// handles 'end tags' </end>
 				indent--
 				if prevFinished {
@@ -61,8 +61,8 @@ func FormatXML(xmlStr string) string {
 				}
 				prevFinished = true
 
-			} else if bufStr[first] == '?' || bufStr[last] == '/' || bufStr[first] == '!' {
-				// handles header <?xml ... ?>, self closing tags <br />, and comments <!-- blah -->
+			} else if first == '?' || first == '!' || last == '/' {
+				// handles header <?xml ... ?>, and comments <!-- blah -->, self closing tags <br />
 				bufStr = strings.TrimSpace(bufStr)
 
 				if prevFinished {
