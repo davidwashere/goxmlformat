@@ -19,7 +19,7 @@ func FormatXML(xmlStr string) string {
 	hitNiner := false
 	inCDATA := false
 
-	var i int // indent level
+	var indent int
 
 	for _, c := range xmlStr {
 		buffer.WriteRune(c)
@@ -51,34 +51,37 @@ func FormatXML(xmlStr string) string {
 			last := len(bufStr) - 2
 
 			if bufStr[first] == '/' {
-				i--
+				// handles 'end tags' </end>
+				indent--
 				if prevFinished {
 					bufStr = strings.TrimSpace(bufStr)
-					fmt.Fprintf(&final, "%s%s\n", identStr(i), bufStr)
+					fmt.Fprintf(&final, "%s%s\n", identStr(indent), bufStr)
 				} else {
 					fmt.Fprintf(&final, "%s\n", bufStr)
 				}
 				prevFinished = true
-			} else if bufStr[first] == '?' || bufStr[last] == '/' || bufStr[first] == '!' {
-				if prevFinished {
-					bufStr = strings.TrimSpace(bufStr)
-					fmt.Fprintf(&final, "%s%s\n", identStr(i), bufStr)
-				} else {
-					bufStr = strings.TrimSpace(bufStr)
-					fmt.Fprintf(&final, "\n%s%s\n", identStr(i), bufStr)
-				}
 
+			} else if bufStr[first] == '?' || bufStr[last] == '/' || bufStr[first] == '!' {
+				// handles header <?xml ... ?>, self closing tags <br />, and comments <!-- blah -->
+				bufStr = strings.TrimSpace(bufStr)
+
+				if prevFinished {
+					fmt.Fprintf(&final, "%s%s\n", identStr(indent), bufStr)
+				} else {
+					fmt.Fprintf(&final, "\n%s%s\n", identStr(indent), bufStr)
+				}
 				prevFinished = true
 
 			} else {
+				// handles start tags <start>
 				bufStr = strings.TrimSpace(bufStr)
 				if prevFinished {
-					fmt.Fprintf(&final, "%s%s", identStr(i), bufStr)
+					fmt.Fprintf(&final, "%s%s", identStr(indent), bufStr)
 				} else {
-					fmt.Fprintf(&final, "\n%s%s", identStr(i), bufStr)
+					fmt.Fprintf(&final, "\n%s%s", identStr(indent), bufStr)
 				}
 				prevFinished = false
-				i++
+				indent++
 			}
 
 			buffer.Reset()
